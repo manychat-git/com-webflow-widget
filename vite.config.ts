@@ -7,7 +7,8 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8080,
+    port: 3000,
+    strictPort: true
   },
   plugins: [
     react(),
@@ -27,8 +28,8 @@ export default defineConfig(({ mode }) => ({
     lib: {
       entry: resolve(__dirname, 'src/main.tsx'),
       name: 'ComGraph',
-      formats: ['es', 'umd'],
-      fileName: (format) => `graph.${format}.js`
+      formats: ['es'],
+      fileName: () => 'graph.min.js'
     },
     rollupOptions: {
       external: ['react', 'react-dom'],

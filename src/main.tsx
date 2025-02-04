@@ -25,16 +25,3 @@ export function initGraph(config: GraphConfig) {
     </React.StrictMode>
   );
 }
-
-// Auto-initialize if script is loaded with data-url attribute
-if (typeof window !== 'undefined') {
-  const script = document.currentScript as HTMLScriptElement;
-  if (script?.dataset.url) {
-    window.addEventListener('load', () => {
-      initGraph({
-        dataUrl: script.dataset.url,
-        containerId: script.dataset.container
-      });
-    });
-  }
-}

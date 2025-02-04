@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Graph Test</title>
+    <!-- React и ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <style>
       body {
         margin: 0;
@@ -79,30 +82,20 @@
     </style>
   </head>
   <body>
-    <div id="graph-container">
-      <script>
-        // URLs для загрузки данных
-        window.GRAPH_CONFIG_URL = "/webflow-config.json";
-        window.GRAPH_DATA_URL = "/data.json";
-        window.webflowConfig = {
-          popup: {
-            trigger: {
-              attribute: "data-w-popup"
-            },
-            elements: {
-              title: { attribute: "data-w-title" },
-              author: { attribute: "data-w-author" },
-              descriptor: { attribute: "data-w-description" },
-              imageUrl: { attribute: "data-w-image" }
-            },
-            close: {
-              attribute: "data-w-close"
-            }
-          }
-        };
-      </script>
-      <script type="module" src="/src/main.tsx"></script>
-    </div>
+    <!-- Контейнер для графа -->
+    <div id="graph-container"></div>
+
+    <!-- Инициализация графа -->
+    <script type="module">
+      import { initGraph } from '/dist/graph.min.js';
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        initGraph({
+          dataUrl: '/data.json',
+          containerId: 'graph-container'
+        });
+      });
+    </script>
 
     <!-- Overlay для попапа -->
     <div class="popup-overlay" data-popup-overlay></div>
