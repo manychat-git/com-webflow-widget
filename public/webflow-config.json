@@ -2,33 +2,26 @@
   "popup": {
     "id": "article-popup",
     "trigger": {
-      "attribute": "data-popup-trigger",
-      "value": "article-popup"
+      "attribute": "data-popup-trigger"
     },
     "elements": {
       "title": {
-        "attribute": "data-popup-title",
-        "value": "article-title"
+        "attribute": "data-popup-title"
       },
       "author": {
-        "attribute": "data-popup-author",
-        "value": "article-author"
+        "attribute": "data-popup-author"
       },
       "description": {
-        "attribute": "data-popup-description",
-        "value": "article-description"
+        "attribute": "data-popup-description"
       },
       "issue": {
-        "attribute": "data-popup-issue",
-        "value": "article-issue"
+        "attribute": "data-popup-issue"
       },
       "type": {
-        "attribute": "data-popup-type",
-        "value": "article-type"
+        "attribute": "data-popup-type"
       },
       "imageUrl": {
-        "attribute": "data-popup-image",
-        "value": "article-image"
+        "attribute": "data-popup-image"
       },
       "link": {
         "attribute": "data-popup-link",
@@ -61,6 +54,39 @@
       "nodeColor": "#1f2937",
       "linkColor": "#9ca3af",
       "highlightColor": "#3b82f6"
+    }
+  },
+  "graphSettings": {
+    "type": {
+      "enabled": false,
+      "strength": 0,
+      "distance": 0
+    },
+    "author": {
+      "enabled": true,
+      "strength": 0.4,
+      "distance": 100
+    },
+    "issue": {
+      "enabled": true,
+      "strength": 1.0,
+      "distance": 0
+    },
+    "visual": {
+      "color": "#666666",
+      "width": 0.1,
+      "opacity": 0.0
+    },
+    "physics": {
+      "repulsion": {
+        "strength": -450,
+        "maxDistance": 140
+      },
+      "collision": {
+        "radius": 10,
+        "strength": 0.7
+      },
+      "centerForce": true
     }
   }
 } 

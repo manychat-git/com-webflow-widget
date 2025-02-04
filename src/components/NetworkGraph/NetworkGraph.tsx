@@ -12,6 +12,12 @@ declare global {
   interface Window {
     GRAPH_CONFIG_URL: string;
     GRAPH_DATA_URL: string;
+    webflowConfig?: {
+      popup?: {
+        trigger?: { attribute: string };
+        elements?: Record<string, { attribute: string }>;
+      };
+    };
   }
 }
 
@@ -35,8 +41,11 @@ const NetworkGraph = () => {
         const config = await configResponse.json();
         const data = await dataResponse.json();
         
-        setGraphData(data);
-        // Apply config settings if needed
+        // Генерируем связи перед установкой данных
+        const links = generateLinks(data.nodes, config.graphSettings);
+        setGraphData({ nodes: data.nodes, links });
+        
+        // Apply config settings
         setSettings(prevSettings => ({
           ...prevSettings,
           ...config.graphSettings
@@ -52,10 +61,10 @@ const NetworkGraph = () => {
   const handleSettingsChange = (newSettings: LinkSettings) => {
     setSettings(newSettings);
     
-    if (graphRef.current) {
+    if (graphRef.current && graphData) {
       // Пересоздаем связи с новыми настройками
-      const newLinks = generateLinks(newData.nodes, newSettings);
-      graphRef.current.graphData({ nodes: newData.nodes, links: newLinks });
+      const newLinks = generateLinks(graphData.nodes, newSettings);
+      graphRef.current.graphData({ nodes: graphData.nodes, links: newLinks });
 
       // Обновляем визуальные параметры
       graphRef.current
@@ -128,7 +137,7 @@ const NetworkGraph = () => {
   };
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !graphData) return;
 
     // Create tooltip element
     const tooltip = document.createElement('div');
@@ -141,7 +150,7 @@ const NetworkGraph = () => {
     // Initialize the 3D force graph
     const Graph = ForceGraph3D()(containerRef.current)
       .backgroundColor('rgba(0,0,0,0)')
-      .graphData(newData)
+      .graphData(graphData)
       .nodeLabel(null)
       .nodeColor((node: any) => {
         switch (node.type) {
@@ -253,8 +262,10 @@ const NetworkGraph = () => {
         return sprite;
       })
       .onNodeClick((node: any) => {
-        setSelectedNode(node);
-        // Aim at node from outside
+        // Вызываем нашу функцию для открытия попапа
+        onNodeClick(node);
+        
+        // Анимация камеры к узлу
         const distance = 40;
         const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
         graphRef.current.cameraPosition(
@@ -330,7 +341,7 @@ const NetworkGraph = () => {
       }
       Graph._destructor();
     };
-  }, []); // Эффект запускается только при монтировании
+  }, [graphData]);
 
   const handleZoomIn = () => {
     if (graphRef.current) {
@@ -352,23 +363,44 @@ const NetworkGraph = () => {
     }
   };
 
+  const onNodeClick = (node: any) => {
+    // Находим элемент с нужным атрибутом
+    const popupTrigger = document.querySelector(`[${window.webflowConfig?.popup?.trigger?.attribute}]`);
+    if (popupTrigger) {
+      // Заполняем данные
+      const elements = window.webflowConfig?.popup?.elements;
+      Object.entries(elements).forEach(([key, value]) => {
+        const element = document.querySelector(`[${value.attribute}]`);
+        if (element) {
+          if (key === 'imageUrl' && element instanceof HTMLImageElement) {
+            element.src = node[key];
+          } else if (key === 'author') {
+            // Форматируем имя автора
+            element.textContent = node[key]
+              .split('-')
+              .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(' ');
+          } else if (key === 'descriptor') {
+            element.textContent = node[key] || '';
+          } else {
+            element.textContent = node[key];
+          }
+        }
+      });
+      
+      // Активируем триггер
+      (popupTrigger as HTMLElement).click();
+    }
+  };
+
   return (
     <div className="relative w-full h-screen">
-      <div ref={containerRef} className="w-full h-full" />
-      <GraphSettingsPanel 
-        settings={settings}
-        onSettingsChange={handleSettingsChange} 
-      />
-      <GraphControls
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onReset={handleReset}
-      />
-      {selectedNode && (
-        <InfoPanel
-          selectedNode={selectedNode}
-          onClose={() => setSelectedNode(null)}
-        />
+      {!graphData ? (
+        <div className="flex items-center justify-center w-full h-full">
+          <div className="text-lg">Loading...</div>
+        </div>
+      ) : (
+        <div ref={containerRef} className="w-full h-full" />
       )}
     </div>
   );
