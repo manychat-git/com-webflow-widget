@@ -22,13 +22,13 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: 'dist',
-    sourcemap: false,
+    sourcemap: true,
     assetsDir: '',
     lib: {
       entry: resolve(__dirname, 'src/main.tsx'),
       name: 'ComGraph',
-      formats: ['es'],
-      fileName: () => 'graph.min.js'
+      formats: ['es', 'umd'],
+      fileName: (format) => `graph.${format}.js`
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
