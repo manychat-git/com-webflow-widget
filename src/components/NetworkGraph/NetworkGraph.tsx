@@ -21,7 +21,14 @@ declare global {
   }
 }
 
-const NetworkGraph = () => {
+interface NetworkGraphProps {
+  webflowIntegration: {
+    openPopup: (data: NodeData) => void;
+    closePopup: () => void;
+  };
+}
+
+const NetworkGraph: React.FC<NetworkGraphProps> = ({ webflowIntegration }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<any>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
