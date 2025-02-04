@@ -25,23 +25,14 @@ export default defineConfig(({ mode }) => ({
     sourcemap: false,
     assetsDir: '',
     lib: {
-      entry: 'src/main.tsx',
+      entry: resolve(__dirname, 'src/main.tsx'),
       name: 'ComGraph',
       formats: ['es'],
       fileName: () => 'graph.min.js'
     },
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        graph: resolve(__dirname, 'src/components/NetworkGraph/NetworkGraph.tsx'),
-      },
       external: ['react', 'react-dom'],
       output: {
-        entryFileNames: (chunkInfo) => {
-          return chunkInfo.name === 'graph' ? 'graph.js' : '[name].[hash].js';
-        },
-        chunkFileNames: '[name].[hash].js',
-        assetFileNames: '[name].[hash][extname]',
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM'
