@@ -27,7 +27,7 @@ jobs:
       - name: Prepare CDN files
         run: |
           mkdir -p dist/cdn
-          cp dist/graph.js dist/cdn/
+          find dist -name "graph.js" -exec cp {} dist/cdn/ \;
           cp public/data.json dist/cdn/
           cp public/webflow-config.json dist/cdn/
 

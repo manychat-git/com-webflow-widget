@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import path from "path";
+import { resolve } from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
@@ -16,16 +16,25 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": resolve(__dirname, "./src"),
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
+    assetsDir: '',
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'index.html')
+        main: resolve(__dirname, 'index.html'),
+        graph: resolve(__dirname, 'src/components/NetworkGraph/NetworkGraph.tsx'),
+      },
+      output: {
+        entryFileNames: (chunkInfo) => {
+          return chunkInfo.name === 'graph' ? 'graph.js' : '[name].[hash].js';
+        },
+        chunkFileNames: '[name].[hash].js',
+        assetFileNames: '[name].[hash][extname]'
       }
     }
   }
