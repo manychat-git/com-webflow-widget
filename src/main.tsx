@@ -43,13 +43,8 @@ function initGraph(config: GraphConfig) {
   );
 }
 
-// Делаем функцию доступной глобально
-declare global {
-  interface Window {
-    initGraph: typeof initGraph;
-  }
-}
-window.initGraph = initGraph;
+// Явно добавляем в window
+(window as any).initGraph = initGraph;
 
 // Make sure React is available globally
 window.React = React;

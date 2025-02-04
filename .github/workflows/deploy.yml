@@ -30,7 +30,6 @@ jobs:
           cp dist/graph.min.js dist/cdn/
           cp dist/graph.min.js.map dist/cdn/
           cp public/data.json dist/cdn/
-          cp public/webflow-config.json dist/cdn/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

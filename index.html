@@ -87,14 +87,10 @@
 
     <!-- Инициализация графа -->
     <script>
-      // Определяем конфигурацию перед загрузкой графа
-      window.GRAPH_CONFIG_URL = "https://cdn.jsdelivr.net/gh/manychat-git/com-webflow-widget@cdn/config.json";
       window.GRAPH_DATA_URL = "https://cdn.jsdelivr.net/gh/manychat-git/com-webflow-widget@cdn/data.json";
       
-      // Для локального тестирования используем локальный скрипт
       const script = document.createElement('script');
-      script.src = '/dist/graph.min.js';
-      script.type = 'module';
+      script.src = 'https://cdn.jsdelivr.net/gh/manychat-git/com-webflow-widget@cdn/graph.min.js';
       script.onload = () => {
         console.log('Graph script loaded');
         if (typeof window.initGraph === 'function') {

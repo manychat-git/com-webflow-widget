@@ -41,8 +41,7 @@ export default defineConfig(({ mode }) => ({
         format: 'iife',
         inlineDynamicImports: true,
         extend: true,
-        name: 'ComGraph',
-        exports: 'named'
+        name: 'ComGraph'
       }
     },
     minify: 'terser',
