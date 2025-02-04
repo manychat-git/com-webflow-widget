@@ -1,0 +1,66 @@
+{
+  "popup": {
+    "id": "article-popup",
+    "trigger": {
+      "attribute": "data-popup-trigger",
+      "value": "article-popup"
+    },
+    "elements": {
+      "title": {
+        "attribute": "data-popup-title",
+        "value": "article-title"
+      },
+      "author": {
+        "attribute": "data-popup-author",
+        "value": "article-author"
+      },
+      "description": {
+        "attribute": "data-popup-description",
+        "value": "article-description"
+      },
+      "issue": {
+        "attribute": "data-popup-issue",
+        "value": "article-issue"
+      },
+      "type": {
+        "attribute": "data-popup-type",
+        "value": "article-type"
+      },
+      "imageUrl": {
+        "attribute": "data-popup-image",
+        "value": "article-image"
+      },
+      "link": {
+        "attribute": "data-popup-link",
+        "value": "article-link"
+      }
+    }
+  },
+  "interactions": {
+    "openTrigger": {
+      "attribute": "data-w-tab-trigger",
+      "value": "open"
+    },
+    "closeTrigger": {
+      "attribute": "data-w-tab-trigger",
+      "value": "close"
+    }
+  },
+  "classes": {
+    "active": "popup-active",
+    "visible": "popup-visible"
+  },
+  "widget": {
+    "name": "COM Graph",
+    "version": "1.0.0",
+    "description": "Interactive graph visualization for COM",
+    "settings": {
+      "width": "100%",
+      "height": "600px",
+      "backgroundColor": "#ffffff",
+      "nodeColor": "#1f2937",
+      "linkColor": "#9ca3af",
+      "highlightColor": "#3b82f6"
+    }
+  }
+} 

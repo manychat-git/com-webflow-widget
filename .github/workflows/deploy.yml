@@ -27,9 +27,9 @@ jobs:
       - name: Prepare CDN files
         run: |
           mkdir -p dist/cdn
+          cp public/data.json dist/cdn/ || echo "Warning: data.json not found"
+          cp public/webflow-config.json dist/cdn/ || echo "Warning: webflow-config.json not found"
           find dist -name "graph.js" -exec cp {} dist/cdn/ \;
-          cp public/data.json dist/cdn/
-          cp public/webflow-config.json dist/cdn/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
