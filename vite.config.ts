@@ -37,7 +37,9 @@ export default defineConfig(({ mode }) => ({
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM'
-        }
+        },
+        format: 'es',
+        inlineDynamicImports: true
       }
     },
     minify: 'terser'
