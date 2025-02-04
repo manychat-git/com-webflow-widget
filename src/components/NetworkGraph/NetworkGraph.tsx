@@ -26,9 +26,10 @@ interface NetworkGraphProps {
     openPopup: (data: NodeData) => void;
     closePopup: () => void;
   };
+  dataUrl?: string;
 }
 
-const NetworkGraph: React.FC<NetworkGraphProps> = ({ webflowIntegration }) => {
+const NetworkGraph: React.FC<NetworkGraphProps> = ({ webflowIntegration, dataUrl }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<any>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
@@ -40,30 +41,19 @@ const NetworkGraph: React.FC<NetworkGraphProps> = ({ webflowIntegration }) => {
     // Load configuration and data
     const loadData = async () => {
       try {
-        const [configResponse, dataResponse] = await Promise.all([
-          fetch(window.GRAPH_CONFIG_URL),
-          fetch(window.GRAPH_DATA_URL)
-        ]);
-        
-        const config = await configResponse.json();
+        const dataResponse = await fetch(dataUrl || window.GRAPH_DATA_URL);
         const data = await dataResponse.json();
         
-        // Генерируем связи перед установкой данных
-        const links = generateLinks(data.nodes, config.graphSettings);
+        // Генерируем связи
+        const links = generateLinks(data.nodes, settings);
         setGraphData({ nodes: data.nodes, links });
-        
-        // Apply config settings
-        setSettings(prevSettings => ({
-          ...prevSettings,
-          ...config.graphSettings
-        }));
       } catch (error) {
         console.error('Failed to load graph data:', error);
       }
     };
 
     loadData();
-  }, []);
+  }, [dataUrl]);
 
   const handleSettingsChange = (newSettings: LinkSettings) => {
     setSettings(newSettings);

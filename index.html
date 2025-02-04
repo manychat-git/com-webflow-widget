@@ -86,15 +86,30 @@
     <div id="graph-container"></div>
 
     <!-- Инициализация графа -->
-    <script type="module">
-      import { initGraph } from '/dist/graph.min.js';
+    <script>
+      // Определяем конфигурацию перед загрузкой графа
+      window.GRAPH_CONFIG_URL = "https://cdn.jsdelivr.net/gh/manychat-git/com-webflow-widget@cdn/config.json";
+      window.GRAPH_DATA_URL = "https://cdn.jsdelivr.net/gh/manychat-git/com-webflow-widget@cdn/data.json";
       
-      document.addEventListener('DOMContentLoaded', () => {
-        initGraph({
-          dataUrl: '/data.json',
-          containerId: 'graph-container'
-        });
-      });
+      // Для локального тестирования используем локальный скрипт
+      const script = document.createElement('script');
+      script.src = '/dist/graph.min.js';
+      script.type = 'module';
+      script.onload = () => {
+        console.log('Graph script loaded');
+        if (typeof window.initGraph === 'function') {
+          window.initGraph({
+            dataUrl: window.GRAPH_DATA_URL,
+            containerId: "graph-container"
+          });
+        } else {
+          console.error('initGraph not found after script load');
+        }
+      };
+      script.onerror = (error) => {
+        console.error('Failed to load graph script:', error);
+      };
+      document.head.appendChild(script);
     </script>
 
     <!-- Overlay для попапа -->

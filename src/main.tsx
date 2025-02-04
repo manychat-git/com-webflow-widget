@@ -10,12 +10,18 @@ interface GraphConfig {
 }
 
 // Экспортируем функцию инициализации для Webflow
-export function initGraph(config: GraphConfig) {
+function initGraph(config: GraphConfig) {
+  console.log('[ComGraph] Initializing with config:', config);
+  console.log('[ComGraph] React available:', !!window.React);
+  console.log('[ComGraph] ReactDOM available:', !!window.ReactDOM);
+  
   const container = document.getElementById(config.containerId || 'graph-container');
   if (!container) {
     console.error('Graph container not found');
     return;
   }
+  
+  console.log('Container found:', container);
 
   // Инициализируем интеграцию с Webflow
   const webflow = initializeWebflowIntegration();
@@ -29,7 +35,21 @@ export function initGraph(config: GraphConfig) {
   // Рендерим React компонент
   ReactDOM.createRoot(graphDiv).render(
     <React.StrictMode>
-      <NetworkGraph webflowIntegration={webflow} />
+      <NetworkGraph 
+        webflowIntegration={webflow}
+        dataUrl={config.dataUrl}
+      />
     </React.StrictMode>
   );
 }
+
+// Делаем функцию доступной глобально
+declare global {
+  interface Window {
+    initGraph: typeof initGraph;
+  }
+}
+window.initGraph = initGraph;
+
+// Make sure React is available globally
+window.React = React;

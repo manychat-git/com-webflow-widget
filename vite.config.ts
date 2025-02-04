@@ -40,11 +40,23 @@ export default defineConfig(({ mode }) => ({
         },
         format: 'iife',
         inlineDynamicImports: true,
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name][extname]'
+        extend: true,
+        name: 'ComGraph',
+        exports: 'named'
       }
     },
     minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: false,
+        pure_getters: true,
+        unsafe: true,
+        unsafe_comps: true
+      },
+      format: {
+        comments: false
+      }
+    },
     target: 'es2015'
   }
 }));
