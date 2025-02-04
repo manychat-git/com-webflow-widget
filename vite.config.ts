@@ -39,9 +39,12 @@ export default defineConfig(({ mode }) => ({
           'react-dom': 'ReactDOM'
         },
         format: 'es',
-        inlineDynamicImports: true
+        inlineDynamicImports: true,
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name][extname]'
       }
     },
-    minify: 'terser'
+    minify: 'terser',
+    target: 'es2015'
   }
 }));

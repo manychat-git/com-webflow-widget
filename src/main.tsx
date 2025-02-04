@@ -1,6 +1,7 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom/client';
 import NetworkGraph from './components/NetworkGraph/NetworkGraph';
+import { initializeWebflowIntegration } from './config/webflowIntegration';
 import './index.css';
 
 interface GraphConfig {
@@ -8,6 +9,7 @@ interface GraphConfig {
   containerId?: string;
 }
 
+// Экспортируем функцию инициализации для Webflow
 export function initGraph(config: GraphConfig) {
   const container = document.getElementById(config.containerId || 'graph-container');
   if (!container) {
@@ -15,13 +17,19 @@ export function initGraph(config: GraphConfig) {
     return;
   }
 
-  // Сохраняем URL данных для использования в компоненте
-  window.GRAPH_DATA_URL = config.dataUrl;
+  // Инициализируем интеграцию с Webflow
+  const webflow = initializeWebflowIntegration();
 
-  const root = createRoot(container);
-  root.render(
+  // Создаем div для графа
+  const graphDiv = document.createElement('div');
+  graphDiv.style.width = '100%';
+  graphDiv.style.height = '100vh';
+  container.appendChild(graphDiv);
+
+  // Рендерим React компонент
+  ReactDOM.createRoot(graphDiv).render(
     <React.StrictMode>
-      <NetworkGraph />
+      <NetworkGraph webflowIntegration={webflow} />
     </React.StrictMode>
   );
 }
