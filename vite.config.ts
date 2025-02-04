@@ -28,17 +28,17 @@ export default defineConfig(({ mode }) => ({
     lib: {
       entry: resolve(__dirname, 'src/main.tsx'),
       name: 'ComGraph',
-      formats: ['es'],
+      formats: ['iife'],
       fileName: () => 'graph.min.js'
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
       output: {
         globals: {
-          react: 'React',
+          'react': 'React',
           'react-dom': 'ReactDOM'
         },
-        format: 'es',
+        format: 'iife',
         inlineDynamicImports: true,
         chunkFileNames: '[name].js',
         assetFileNames: '[name][extname]'
