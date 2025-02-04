@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -33,15 +31,10 @@ jobs:
           cp public/webflow-config.json dist/cdn/ || echo "Warning: webflow-config.json not found"
           find dist -name "graph.js" -exec cp {} dist/cdn/ \;
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
-          
-      - name: Deploy to CDN branch
-        run: |
-          cd dist/cdn
-          git init
-          git add -A
-          git commit -m "Deploy to CDN"
-          git push -f https://${{ secrets.PAT_TOKEN }}@github.com/manychat-git/com-webflow-widget.git HEAD:cdn 
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.PAT_TOKEN }}
+          publish_dir: ./dist/cdn
+          publish_branch: cdn
+          force_orphan: true 

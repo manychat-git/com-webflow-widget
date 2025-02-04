@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import ForceGraph3D from '3d-force-graph';
-import { newData } from './newData';
 import InfoPanel from './InfoPanel';
 import GraphControls from './GraphControls';
 import GraphSettingsPanel from './GraphSettingsPanel';
@@ -9,12 +8,46 @@ import * as THREE from 'three';
 import * as d3 from 'd3';
 import { GRAPH_PHYSICS_PARAMS, DEFAULT_LINK_SETTINGS, LinkSettings, getLinkTypes, generateLinks } from './graphUtils';
 
+declare global {
+  interface Window {
+    GRAPH_CONFIG_URL: string;
+    GRAPH_DATA_URL: string;
+  }
+}
+
 const NetworkGraph = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<any>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [settings, setSettings] = useState<LinkSettings>(DEFAULT_LINK_SETTINGS);
+  const [graphData, setGraphData] = useState<any>(null);
+
+  useEffect(() => {
+    // Load configuration and data
+    const loadData = async () => {
+      try {
+        const [configResponse, dataResponse] = await Promise.all([
+          fetch(window.GRAPH_CONFIG_URL),
+          fetch(window.GRAPH_DATA_URL)
+        ]);
+        
+        const config = await configResponse.json();
+        const data = await dataResponse.json();
+        
+        setGraphData(data);
+        // Apply config settings if needed
+        setSettings(prevSettings => ({
+          ...prevSettings,
+          ...config.graphSettings
+        }));
+      } catch (error) {
+        console.error('Failed to load graph data:', error);
+      }
+    };
+
+    loadData();
+  }, []);
 
   const handleSettingsChange = (newSettings: LinkSettings) => {
     setSettings(newSettings);
